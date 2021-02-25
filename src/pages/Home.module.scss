@@ -1,0 +1,92 @@
+@import '../variables';
+
+.container {
+  flex: 1;
+  max-width: 90%;
+  margin-top: 2rem;
+  width: 1000px;
+}
+
+.hero {
+  // background-color: salmon;
+  display: flex;
+  margin-top: 10rem;
+  justify-content: center;
+  align-items: center;
+}
+
+.left {
+  flex: 1;
+
+  h1 {
+    font-size: 4rem;
+    font-weight: 100;
+  }
+}
+
+.right {
+  flex: 1;
+
+  img {
+    width: 100%;
+  }
+}
+
+.form {
+  display: flex;
+  font-size: 1.6rem;
+
+  input {
+    font-size: 2rem;
+    flex: 1;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    border-right: 0;
+    border: 2px solid $vue-green;
+    padding: 2rem;
+
+    &:focus {
+      outline: none;
+      border-color: $vue-blue;
+    }
+  }
+
+  button {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    background-color: $vue-green;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    span {
+      margin-right: 1rem;
+    }
+
+    &:hover,
+    &:focus {
+      background-color: $vue-blue;
+    }
+
+    &:focus {
+      outline: none;
+    }
+  }
+}
+
+@media screen and (max-width: 700px) {
+  .hero {
+    flex-direction: column-reverse;
+    margin-top: 0;
+  }
+
+  .right {
+    text-align: center;
+    margin: 5rem 0;
+
+    img {
+      width: 60%;
+    }
+  }
+}

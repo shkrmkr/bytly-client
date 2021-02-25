@@ -1,1 +1,1 @@
-# React Snowpack Typescript ESLint Prettier Template
+# bytly: url shortener
