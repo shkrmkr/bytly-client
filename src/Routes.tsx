@@ -1,18 +1,12 @@
-import React from 'react'
-import { BrowserRouter, Route, Switch } from 'react-router-dom'
-import { Navbar } from './components/Navbar'
-import { Home } from './pages/Home'
-import { Login } from './pages/Login'
-import { Register } from './pages/Register'
+import React from 'react';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { Navbar } from './components/Navbar';
+import { Home } from './pages/Home';
+import { Login } from './pages/Login';
+import { Register } from './pages/Register';
+import type { TRoute } from './types';
 
-interface IRoute {
-  exact?: boolean
-  path: string
-  component: React.ComponentClass | React.FC
-  name: string
-}
-
-const routes: IRoute[] = [
+const routes: TRoute[] = [
   {
     exact: true,
     path: '/',
@@ -22,19 +16,19 @@ const routes: IRoute[] = [
   {
     path: '/login',
     component: Login,
-    name: 'Login',
+    name: '로그인',
   },
   {
     path: '/register',
     component: Register,
-    name: 'Register',
+    name: '회원가입',
   },
-]
+];
 
 export const Routes: React.FC = () => {
   return (
     <BrowserRouter>
-      <Navbar paths={routes.map(({ path, name }) => ({ path, name }))} />
+      <Navbar routes={routes.map(({ path, name }) => ({ path, name }))} />
 
       <Switch>
         {routes.map(({ exact, component, path }) => (
@@ -45,5 +39,5 @@ export const Routes: React.FC = () => {
         <Route path="/register" component={Register} />
       </Switch>
     </BrowserRouter>
-  )
-}
+  );
+};

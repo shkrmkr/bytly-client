@@ -1,19 +1,19 @@
-import React from 'react'
-import { NavLink } from 'react-router-dom'
-import styles from './Navbar.module.scss'
+import React from 'react';
+import { NavLink } from 'react-router-dom';
+import styles from './Navbar.module.scss';
 
 interface Props {
-  paths: { path: string; name: string }[]
+  routes: { path: string; name: string }[];
 }
 
-export const Navbar: React.FC<Props> = ({ paths }) => {
+export const Navbar: React.FC<Props> = ({ routes }) => {
   return (
     <header className={styles.container}>
       <div>
         <h2>bytly</h2>
 
         <nav>
-          {paths.map(({ path, name }) => (
+          {routes.map(({ path, name }) => (
             <NavLink key={path} to={path}>
               {name}
             </NavLink>
@@ -21,5 +21,5 @@ export const Navbar: React.FC<Props> = ({ paths }) => {
         </nav>
       </div>
     </header>
-  )
-}
+  );
+};
