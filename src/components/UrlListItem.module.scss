@@ -1,0 +1,35 @@
+@import '../variables';
+
+.container {
+  background-color: $vue-blue;
+  color: #fff;
+  border-radius: 5px;
+  padding: 2rem;
+  font-size: 1.5rem;
+
+  a {
+    color: #fff;
+    margin-top: 1rem;
+    display: block;
+  }
+}
+
+.control {
+  margin-top: 2rem;
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+
+  button {
+    border: 2px solid $vue-green;
+    color: $vue-green;
+    font-weight: 700;
+    background-color: transparent;
+    transition: background-color 0.3s ease;
+    padding: 1rem 2rem;
+
+    &:hover {
+      background-color: $vue-blue;
+    }
+  }
+}

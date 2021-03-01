@@ -2,36 +2,39 @@ import type { AxiosError } from 'axios';
 import React, { useState } from 'react';
 import { IoRocketOutline } from 'react-icons/io5';
 import Loader from 'react-loader-spinner';
-import { useMutation, useQuery } from 'react-query';
+import { useMutation } from 'react-query';
 import api from '../api';
 import heroImage from '../assets/hero-image.svg';
-import { Urls } from '../components/Urls';
-import type { ApiError, Url } from '../types';
+import { UrlList } from '../components/UrlList';
+import type { Url } from '../types';
 import styles from './Home.module.scss';
 
 export const Home: React.FC = () => {
   const [originalUrl, setOriginalUrl] = useState('');
 
-  const [shortUrlIds, setShortUrlIds] = useState<number[]>(() => {
-    const local = localStorage.getItem('shortUrlIds');
+  const [shortUrls, setShortUrls] = useState<Url[]>(() => {
+    const local = localStorage.getItem('shortUrls');
     return local ? JSON.parse(local) : [];
   });
 
-  const { data, isLoading, isError } = useQuery<Url[], ApiError>(
-    ['local_urls', { shortUrlIds }],
-    () => api.getDataForLocalStorage(shortUrlIds),
-    {
-      enabled: shortUrlIds.length > 0,
-    },
-  );
+  // const { data, isLoading, isError } = useQuery<Url[], ApiError>(
+  //   ['local_urls', { shortUrlIds }],
+  //   () => api.getDataForLocalStorage(shortUrlIds),
+  //   {
+  //     enabled: shortUrlIds.length > 0,
+  //   },
+  // );
 
   const { mutate, isLoading: isMutating } = useMutation(api.makeUrl, {
     onSuccess: (data) => {
-      setShortUrlIds((prev) => {
-        const newIds = [data.id, ...prev];
+      if (shortUrls.some((url) => url.id === data.id)) {
+        return;
+      }
 
-        localStorage.setItem('shortUrlIds', JSON.stringify(newIds));
-        return newIds;
+      setShortUrls((prev) => {
+        const newList = [data, ...prev];
+        localStorage.setItem('shortUrls', JSON.stringify(newList));
+        return newList;
       });
     },
     onError: (error: AxiosError) => {
@@ -42,7 +45,9 @@ export const Home: React.FC = () => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (originalUrl.trim() === '') return;
+
     mutate(originalUrl);
+    setOriginalUrl('');
   };
 
   return (
@@ -70,7 +75,7 @@ export const Home: React.FC = () => {
         />
         <button type="submit" disabled={isMutating}>
           {isMutating ? (
-            <Loader type="ThreeDots" />
+            <Loader type="ThreeDots" height="100%" color="#fff" />
           ) : (
             <>
               <span>let&apos;s gooo</span>
@@ -81,13 +86,7 @@ export const Home: React.FC = () => {
       </form>
 
       <div>
-        {isLoading ? (
-          <h2>loading...</h2>
-        ) : isError ? (
-          <h2>error</h2>
-        ) : (
-          <Urls urls={data} />
-        )}
+        <UrlList urls={shortUrls} />
       </div>
     </main>
   );
