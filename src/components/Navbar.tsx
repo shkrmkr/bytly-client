@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import styles from './Navbar.module.scss';
 
 interface Props {
@@ -10,11 +10,13 @@ export const Navbar: React.FC<Props> = ({ routes }) => {
   return (
     <header className={styles.container}>
       <div>
-        <h2>bytly</h2>
+        <Link to="/" className={styles.brand}>
+          <h2>bytly</h2>
+        </Link>
 
         <nav>
           {routes.map(({ path, name }) => (
-            <NavLink key={path} to={path}>
+            <NavLink key={path} to={path} className={styles.navLink}>
               {name}
             </NavLink>
           ))}

@@ -1,8 +1,10 @@
 import React from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { Footer } from './components/Footer';
 import { Navbar } from './components/Navbar';
 import { Home } from './pages/Home';
 import { Login } from './pages/Login';
+import { NotFound } from './pages/NotFound';
 import { Register } from './pages/Register';
 import type { TRoute } from './types';
 
@@ -37,7 +39,10 @@ export const Routes: React.FC = () => {
         <Route exact path="/" component={Home} />
         <Route path="/login" component={Login} />
         <Route path="/register" component={Register} />
+        <Route component={NotFound} />
       </Switch>
+
+      <Footer />
     </BrowserRouter>
   );
 };

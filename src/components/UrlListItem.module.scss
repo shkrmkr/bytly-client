@@ -7,6 +7,12 @@
   padding: 2rem;
   font-size: 1.5rem;
 
+  h3 {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
   a {
     color: #fff;
     margin-top: 1rem;
@@ -25,11 +31,13 @@
     color: $vue-green;
     font-weight: 700;
     background-color: transparent;
-    transition: background-color 0.3s ease;
+    transition: all 0.3s ease;
     padding: 1rem 2rem;
 
-    &:hover {
-      background-color: $vue-blue;
+    &:hover,
+    &:focus {
+      background-color: $vue-green;
+      color: $vue-blue;
     }
   }
 }

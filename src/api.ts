@@ -8,11 +8,4 @@ export default {
     axios
       .post<Url>('/urls', { originalUrl })
       .then((res) => res.data),
-
-  getDataForLocalStorage: (shortUrlIds: number[]) =>
-    axios
-      .get<Url[]>('/urls', {
-        params: { shortUrlIds: shortUrlIds.join(',') },
-      })
-      .then((res) => res.data),
 };

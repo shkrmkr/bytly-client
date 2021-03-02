@@ -17,14 +17,6 @@ export const Home: React.FC = () => {
     return local ? JSON.parse(local) : [];
   });
 
-  // const { data, isLoading, isError } = useQuery<Url[], ApiError>(
-  //   ['local_urls', { shortUrlIds }],
-  //   () => api.getDataForLocalStorage(shortUrlIds),
-  //   {
-  //     enabled: shortUrlIds.length > 0,
-  //   },
-  // );
-
   const { mutate, isLoading: isMutating } = useMutation(api.makeUrl, {
     onSuccess: (data) => {
       if (shortUrls.some((url) => url.id === data.id)) {
@@ -51,7 +43,7 @@ export const Home: React.FC = () => {
   };
 
   return (
-    <main className={styles.container}>
+    <main>
       <div className={styles.hero}>
         <div className={styles.left}>
           <h1>긴 url을 짧게 줄여보세요.</h1>
@@ -85,9 +77,7 @@ export const Home: React.FC = () => {
         </button>
       </form>
 
-      <div>
-        <UrlList urls={shortUrls} />
-      </div>
+      <UrlList urls={shortUrls} />
     </main>
   );
 };

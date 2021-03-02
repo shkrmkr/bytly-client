@@ -1,18 +1,12 @@
 @import '../variables';
 
-.container {
-  flex: 1;
-  max-width: 90%;
-  width: 1000px;
-  margin: 2rem 0;
-}
-
 .hero {
   // background-color: salmon;
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 2rem;
+  margin-bottom: 2rem;
 }
 
 .left {
@@ -35,7 +29,6 @@
 }
 
 .form {
-  margin-top: 5rem;
   display: flex;
   font-size: 1.6rem;
 
@@ -75,10 +68,6 @@
     &:focus {
       background-color: $vue-blue;
     }
-
-    &:focus {
-      outline: none;
-    }
   }
 }
 
@@ -86,6 +75,7 @@
   .hero {
     flex-direction: column-reverse;
     text-align: center;
+    gap: 0;
   }
 
   .right {

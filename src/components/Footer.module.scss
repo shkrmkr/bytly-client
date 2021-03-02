@@ -1,0 +1,23 @@
+@import '../variables';
+
+.container {
+  padding: 3rem;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  background-color: $vue-blue;
+  color: $vue-green;
+  font-size: 1.6rem;
+
+  a {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+.title {
+  font-weight: 700;
+}
