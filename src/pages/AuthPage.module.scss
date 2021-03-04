@@ -1,4 +1,82 @@
+@import '../variables';
+
 .container {
   display: flex;
   justify-content: center;
+}
+
+.formWrapper {
+  width: 100%;
+  max-width: 400px;
+
+  h2 {
+    font-size: 4rem;
+    font-weight: 100;
+    margin-bottom: 2rem;
+    color: $vue-blue;
+    text-align: center;
+  }
+}
+
+.form {
+  font-size: 1.6rem;
+  display: flex;
+  flex-direction: column;
+  // gap: 2rem;
+}
+
+.formGroup {
+  label {
+    display: none;
+  }
+
+  input {
+    border-radius: 2px;
+    border: 2px solid #ddd;
+    width: 100%;
+    font-size: inherit;
+    padding: 1.5rem;
+    transition: border-color 0.3s ease;
+
+    &:focus {
+      border-color: $vue-blue;
+      outline: none;
+    }
+
+    &.error {
+      border-color: $danger;
+    }
+  }
+
+  span {
+    display: block;
+    color: $danger;
+    font-size: 1.5rem;
+    height: 2.5rem;
+  }
+}
+
+.formButton {
+  font-size: inherit;
+  padding: 1.7rem;
+  background-color: $vue-green;
+  color: #fff;
+  transition: background-color 0.3s ease;
+
+  &:hover,
+  &:focus {
+    background-color: lighten($vue-green, 10);
+  }
+}
+
+@media screen and (max-width: 700px) {
+  .formButton {
+    padding: 2rem;
+  }
+
+  .formGroup {
+    input {
+      padding: 1.8rem;
+    }
+  }
 }

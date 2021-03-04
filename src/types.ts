@@ -1,21 +1,21 @@
 import type { AxiosError } from 'axios';
 
-type ErrorData = {
+interface ErrorData {
   message: string;
-};
+}
 
 export type ApiError = AxiosError<ErrorData>;
 
-export type Url = {
+export interface Url {
   id: number;
   hash: string;
   original_url: string;
   hits: number;
-};
+}
 
-export type TRoute = {
+export interface TRoute {
   exact?: boolean;
   path: string;
   component: React.ComponentClass | React.FC;
   name: string;
-};
+}
