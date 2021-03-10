@@ -1,7 +1,9 @@
 import hookFormResolver from '@hookform/resolvers/yup';
 import React from 'react';
 import { useForm } from 'react-hook-form';
+import Loader from 'react-loader-spinner';
 import * as yup from 'yup';
+import { useAuthContext } from '../contexts/AuthContext';
 import styles from './AuthPage.module.scss';
 
 interface LoginFormData {
@@ -21,9 +23,10 @@ export const Login: React.FC = () => {
   const { register, handleSubmit, errors } = useForm<LoginFormData>({
     resolver: hookFormResolver.yupResolver(loginSchema),
   });
+  const { login, isLoading, isLoggedIn, error } = useAuthContext();
 
-  const onSubmit = handleSubmit(({ email, password }) => {
-    console.log(email, password);
+  const onSubmit = handleSubmit(async ({ email, password }) => {
+    login(email, password);
   });
 
   return (
@@ -57,7 +60,14 @@ export const Login: React.FC = () => {
             <span>{errors.password?.message}</span>
           </div>
 
-          <button className={styles.formButton}>로그인 </button>
+          <button className={styles.formButton} disabled={isLoading}>
+            {isLoading ? (
+              <Loader type="ThreeDots" height="100%" color="#fff" />
+            ) : (
+              '로그인'
+            )}
+          </button>
+          <span className={error ? styles.error : ''}>{error}</span>
         </form>
       </div>
     </main>

@@ -18,7 +18,7 @@ export const Home: React.FC = () => {
     return local ? JSON.parse(local) : [];
   });
 
-  const { mutate, isLoading: isMutating } = useMutation(api.makeUrl, {
+  const { mutate, isLoading: isMutating } = useMutation(api.createUrl, {
     onSuccess: (data) => {
       if (shortUrls.some((url) => url.id === data.id)) {
         return;

@@ -22,7 +22,13 @@
   font-size: 1.6rem;
   display: flex;
   flex-direction: column;
-  // gap: 2rem;
+
+  span {
+    display: block;
+    color: $danger;
+    font-size: 1.5rem;
+    height: 2.5rem;
+  }
 }
 
 .formGroup {
@@ -46,13 +52,6 @@
     &.error {
       border-color: $danger;
     }
-  }
-
-  span {
-    display: block;
-    color: $danger;
-    font-size: 1.5rem;
-    height: 2.5rem;
   }
 }
 
