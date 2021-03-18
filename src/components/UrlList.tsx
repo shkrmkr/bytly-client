@@ -1,10 +1,10 @@
 import React from 'react';
-import type { Url } from '../types';
+import type { IUrl } from '../types';
 import styles from './UrlList.module.scss';
 import { UrlListItem } from './UrlListItem';
 
 interface Props {
-  urls: Url[] | undefined;
+  urls: IUrl[] | undefined;
 }
 
 export const UrlList: React.FC<Props> = ({ urls = [] }) => {

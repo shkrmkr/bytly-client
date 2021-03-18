@@ -2,16 +2,13 @@ import hookFormResolver from '@hookform/resolvers/yup';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import Loader from 'react-loader-spinner';
+import { useHistory } from 'react-router';
 import * as yup from 'yup';
 import { useAuthContext } from '../contexts/AuthContext';
+import type { ILoginFormData } from '../types';
 import styles from './AuthPage.module.scss';
 
-interface LoginFormData {
-  email: string;
-  password: string;
-}
-
-const loginSchema: yup.SchemaOf<LoginFormData> = yup.object().shape({
+const loginSchema: yup.SchemaOf<ILoginFormData> = yup.object().shape({
   email: yup
     .string()
     .email('올바른 이메일 주소를 입력해주세요')
@@ -20,13 +17,18 @@ const loginSchema: yup.SchemaOf<LoginFormData> = yup.object().shape({
 });
 
 export const Login: React.FC = () => {
-  const { register, handleSubmit, errors } = useForm<LoginFormData>({
+  const { register, handleSubmit, errors } = useForm<ILoginFormData>({
     resolver: hookFormResolver.yupResolver(loginSchema),
   });
-  const { login, isLoading, isLoggedIn, error } = useAuthContext();
+  const history = useHistory();
+  const { isLoading, error, login } = useAuthContext();
 
-  const onSubmit = handleSubmit(async ({ email, password }) => {
-    login(email, password);
+  const onSubmit = handleSubmit(async (data) => {
+    await login(data);
+
+    if (!error) {
+      history.push('/dashboard');
+    }
   });
 
   return (

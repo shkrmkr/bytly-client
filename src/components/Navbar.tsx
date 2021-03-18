@@ -1,25 +1,44 @@
 import React from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useHistory } from 'react-router-dom';
+import { useAuthContext } from '../contexts/AuthContext';
 import styles from './Navbar.module.scss';
 
-interface Props {
-  routes: { path: string; name: string }[];
-}
+export const Navbar: React.FC = () => {
+  const { isLoggedIn, logout } = useAuthContext();
+  const history = useHistory();
 
-export const Navbar: React.FC<Props> = ({ routes }) => {
+  const handleLogout = () => {
+    logout();
+    history.push('/');
+  };
+
   return (
     <header className={styles.container}>
       <div>
-        <Link to="/" className={styles.brand}>
+        <Link to={isLoggedIn ? '/dashboard' : '/'} className={styles.brand}>
           <h2>bytly</h2>
         </Link>
 
         <nav>
-          {routes.map(({ path, name }) => (
-            <NavLink key={path} to={path} className={styles.navLink}>
-              {name}
-            </NavLink>
-          ))}
+          {isLoggedIn ? (
+            <>
+              <button onClick={handleLogout} className={styles.navItem}>
+                로그아웃
+              </button>
+              <NavLink to="/dashboard" className={styles.navItem}>
+                dashboard
+              </NavLink>
+            </>
+          ) : (
+            <>
+              <NavLink to="/login" className={styles.navItem}>
+                로그인
+              </NavLink>
+              <NavLink to="/register" className={styles.navItem}>
+                회원가입
+              </NavLink>
+            </>
+          )}
         </nav>
       </div>
     </header>

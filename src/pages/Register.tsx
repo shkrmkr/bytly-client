@@ -1,7 +1,10 @@
 import hookFormResolver from '@hookform/resolvers/yup';
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import Loader from 'react-loader-spinner';
+import { useHistory } from 'react-router';
 import * as yup from 'yup';
+import api from '../api';
 import styles from './AuthPage.module.scss';
 
 interface RegisterFormData {
@@ -36,9 +39,21 @@ export const Register: React.FC = () => {
     resolver: hookFormResolver.yupResolver(registerSchema),
     mode: 'onBlur',
   });
+  const [error, setError] = useState<null | string>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const history = useHistory();
 
-  const onSubmit = handleSubmit(({ email, password, confirmPassword }) => {
-    console.log(email, password, confirmPassword);
+  const onSubmit = handleSubmit(async ({ email, password }) => {
+    try {
+      setError(null);
+      setIsLoading(true);
+      await api.register({ email, password });
+      history.push('/login');
+    } catch (error) {
+      setError(error.response.data.message);
+    } finally {
+      setIsLoading(false);
+    }
   });
 
   return (
@@ -85,7 +100,14 @@ export const Register: React.FC = () => {
             <span>{errors.confirmPassword?.message}</span>
           </div>
 
-          <button className={styles.formButton}>회원가입</button>
+          <button className={styles.formButton} disabled={isLoading}>
+            {isLoading ? (
+              <Loader type="ThreeDots" height="100%" color="#fff" />
+            ) : (
+              '로그인'
+            )}
+          </button>
+          <span className={error ? styles.error : ''}>{error}</span>
         </form>
       </div>
     </main>

@@ -7,7 +7,7 @@ export const Footer: React.FC = () => {
     <footer className={styles.container}>
       <p className={styles.title}>bytly</p>
       <p>2021 Sanghyun Park</p>
-      <a href="https://github.com/shkrmkr">
+      <a href="https://github.com/shkrmkr" target="_blank" rel="noreferrer">
         <AiFillGithub color="#42b883" size={30} />
       </a>
     </footer>

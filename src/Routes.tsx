@@ -1,42 +1,54 @@
-import React from 'react';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Route, Switch, useLocation } from 'react-router-dom';
+import { setAccessToken } from './accessToken';
+import api from './api';
+import { Footer } from './components/Footer';
 import { Navbar } from './components/Navbar';
+import { PageSpinner } from './components/PageSpinner';
+import { ProtectedRoute } from './components/ProtectedRoute';
+import { useAuthContext } from './contexts/AuthContext';
+import { Dashboard } from './pages/Dashboard';
 import { Home } from './pages/Home';
 import { Login } from './pages/Login';
 import { NotFound } from './pages/NotFound';
 import { Register } from './pages/Register';
-import type { TRoute } from './types';
-
-const routes: TRoute[] = [
-  {
-    exact: true,
-    path: '/',
-    component: Home,
-    name: 'Home',
-  },
-  {
-    path: '/login',
-    component: Login,
-    name: '로그인',
-  },
-  {
-    path: '/register',
-    component: Register,
-    name: '회원가입',
-  },
-];
 
 export const Routes: React.FC = () => {
-  return (
-    <BrowserRouter>
-      <Navbar routes={routes.map(({ path, name }) => ({ path, name }))} />
+  const [loading, setLoading] = useState(true);
+  const { setIsLoggedIn, isLoggedIn } = useAuthContext();
+  const location = useLocation();
 
-      <Switch>
-        {routes.map(({ exact, component, path }) => (
-          <Route key={path} exact={exact} path={path} component={component} />
-        ))}
-        <Route component={NotFound} />
-      </Switch>
-    </BrowserRouter>
+  useEffect(() => {
+    (async () => {
+      try {
+        const { accessToken } = await api.refreshToken();
+        setAccessToken(accessToken);
+        setIsLoggedIn(true);
+      } finally {
+        setLoading(false);
+      }
+    })();
+  }, []);
+
+  return (
+    <>
+      {location.pathname !== '/login' && location.pathname !== '/register' && (
+        <Navbar />
+      )}
+      {loading ? (
+        <PageSpinner />
+      ) : (
+        <Switch>
+          <Route exact path="/" component={Home} />
+          <Route path="/login" component={Login} />
+          <Route path="/register" component={Register} />
+          <ProtectedRoute path="/dashboard" component={Dashboard} />
+          <Route component={NotFound} />
+        </Switch>
+      )}
+      {location.pathname !== '/login' && location.pathname !== '/register' && (
+        <Footer />
+      )}
+    </>
   );
 };

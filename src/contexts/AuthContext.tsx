@@ -1,21 +1,25 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
 import React, { createContext, useContext, useState } from 'react';
+import { setAccessToken } from '../accessToken';
 import api from '../api';
+import type { ILoginFormData } from '../types';
 
 interface AuthContextValue {
   isLoggedIn: boolean;
   isLoading: boolean;
   error: string | null;
-  login: (email: string, password: string) => Promise<void>;
+  login: (data: ILoginFormData) => Promise<void>;
+  logout: () => Promise<void>;
+  setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const AuthContext = createContext<AuthContextValue>({
   isLoggedIn: false,
   isLoading: false,
   error: null,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  login: async (email, password) => {
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-  },
+  login: async () => {},
+  logout: async () => {},
+  setIsLoggedIn: () => {},
 });
 
 export const useAuthContext = () => useContext(AuthContext);
@@ -25,11 +29,12 @@ export const AuthProvider: React.FC = ({ children }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  const login = async (email: string, password: string) => {
+  const login = async ({ email, password }: ILoginFormData) => {
     setIsLoading(true);
     setError(null);
     try {
-      await api.login(email, password);
+      const { accessToken } = await api.login({ email, password });
+      setAccessToken(accessToken);
       setIsLoggedIn(true);
     } catch (error) {
       setError(error.response.data.message);
@@ -38,8 +43,16 @@ export const AuthProvider: React.FC = ({ children }) => {
     }
   };
 
+  const logout = async () => {
+    await api.logout();
+    setAccessToken('');
+    setIsLoggedIn(false);
+  };
+
   return (
-    <AuthContext.Provider value={{ isLoggedIn, login, isLoading, error }}>
+    <AuthContext.Provider
+      value={{ isLoggedIn, login, logout, isLoading, error, setIsLoggedIn }}
+    >
       {children}
     </AuthContext.Provider>
   );

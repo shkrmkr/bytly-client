@@ -6,16 +6,26 @@ interface ErrorData {
 
 export type ApiError = AxiosError<ErrorData>;
 
-export interface Url {
+export interface IUrl {
   id: number;
   hash: string;
-  original_url: string;
+  originalUrl: string;
   hits: number;
 }
 
-export interface TRoute {
+export interface IRoute {
   exact?: boolean;
   path: string;
   component: React.ComponentClass | React.FC;
   name: string;
+  isPrivate?: boolean;
+}
+
+export interface IResponseWithToken {
+  accessToken: string;
+}
+
+export interface ILoginFormData {
+  email: string;
+  password: string;
 }

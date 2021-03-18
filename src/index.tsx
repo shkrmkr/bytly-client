@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
+import { BrowserRouter } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
 import './index.css';
 import { Routes } from './Routes';
@@ -12,7 +13,9 @@ ReactDOM.render(
   <React.StrictMode>
     <AuthProvider>
       <QueryClientProvider client={queryClient}>
-        <Routes />
+        <BrowserRouter>
+          <Routes />
+        </BrowserRouter>
         <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>
     </AuthProvider>

@@ -1,10 +1,10 @@
 import Clipboard from 'clipboard';
 import React, { useEffect, useMemo, useRef } from 'react';
-import type { Url } from '../types';
+import type { IUrl } from '../types';
 import styles from './UrlListItem.module.scss';
 
 interface Props {
-  url: Url;
+  url: IUrl;
 }
 
 export const UrlListItem: React.FC<Props> = ({ url }) => {
@@ -41,9 +41,9 @@ export const UrlListItem: React.FC<Props> = ({ url }) => {
         url.hash
       }`,
       short: `${import.meta.env.SNOWPACK_PUBLIC_API_URL}/${url.hash}`,
-      original: url.original_url.startsWith('http://')
-        ? url.original_url.slice(7)
-        : url.original_url.slice(8),
+      original: url.originalUrl.startsWith('http://')
+        ? url.originalUrl.slice(7)
+        : url.originalUrl.slice(8),
     }),
     [url],
   );
