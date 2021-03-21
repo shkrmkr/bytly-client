@@ -25,9 +25,13 @@ const getIcon = (type: INotification['type']) => {
 
 interface Props {
   position?: 'topRight' | 'bottomRight' | 'topLeft' | 'bottomLeft';
+  interval?: number;
 }
 
-export const Toast: React.FC<Props> = ({ position = 'bottomLeft' }) => {
+export const Toast: React.FC<Props> = ({
+  position = 'bottomLeft',
+  interval,
+}) => {
   const { state, dispatch } = useNotificationContext();
 
   const handleDelete = (id: string) => () => {
@@ -36,18 +40,26 @@ export const Toast: React.FC<Props> = ({ position = 'bottomLeft' }) => {
 
   return (
     <div className={`${styles.container} ${styles[position]}`}>
-      {state.map((noti) => (
-        <div key={noti.id} className={`${styles.noti} ${styles[noti.type]}`}>
-          <button className={styles.closeBtn} onClick={handleDelete(noti.id)}>
-            <BsX />
-          </button>
-          <div className={styles.notiIcon}>{getIcon(noti.type)}</div>
-          <div>
-            <p className={styles.notiTitle}>{noti.title}</p>
-            <p className={styles.notiMessage}>{noti.message}</p>
+      {state.map((noti) => {
+        if (interval !== undefined) {
+          setInterval(() => {
+            dispatch({ type: 'DELETE', payload: noti.id });
+          }, interval);
+        }
+
+        return (
+          <div key={noti.id} className={`${styles.noti} ${styles[noti.type]}`}>
+            <button className={styles.closeBtn} onClick={handleDelete(noti.id)}>
+              <BsX />
+            </button>
+            <div className={styles.notiIcon}>{getIcon(noti.type)}</div>
+            <div>
+              <p className={styles.notiTitle}>{noti.title}</p>
+              <p className={styles.notiMessage}>{noti.message}</p>
+            </div>
           </div>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 };
