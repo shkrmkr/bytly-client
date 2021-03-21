@@ -6,6 +6,7 @@ import { Footer } from './components/Footer';
 import { Navbar } from './components/Navbar';
 import { PageSpinner } from './components/PageSpinner';
 import { ProtectedRoute } from './components/ProtectedRoute';
+import { Toast } from './components/Toast';
 import { useAuthContext } from './contexts/AuthContext';
 import { Dashboard } from './pages/Dashboard';
 import { Home } from './pages/Home';
@@ -32,6 +33,7 @@ export const Routes: React.FC = () => {
 
   return (
     <>
+      <Toast />
       {location.pathname !== '/login' && location.pathname !== '/register' && (
         <Navbar />
       )}

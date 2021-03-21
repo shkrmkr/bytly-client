@@ -29,3 +29,10 @@ export interface ILoginFormData {
   email: string;
   password: string;
 }
+
+export interface INotification {
+  id: string;
+  type: 'SUCCESS' | 'DANGER' | 'INFO' | 'WARNING';
+  title: string;
+  message?: string;
+}

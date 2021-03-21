@@ -4,6 +4,7 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import { BrowserRouter } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
+import { NotificationProvider } from './contexts/NotificationContext';
 import './index.css';
 import { Routes } from './Routes';
 
@@ -12,12 +13,14 @@ const queryClient = new QueryClient();
 ReactDOM.render(
   <React.StrictMode>
     <AuthProvider>
-      <QueryClientProvider client={queryClient}>
-        <BrowserRouter>
-          <Routes />
-        </BrowserRouter>
-        <ReactQueryDevtools initialIsOpen={false} />
-      </QueryClientProvider>
+      <NotificationProvider>
+        <QueryClientProvider client={queryClient}>
+          <BrowserRouter>
+            <Routes />
+          </BrowserRouter>
+          <ReactQueryDevtools initialIsOpen={false} />
+        </QueryClientProvider>
+      </NotificationProvider>
     </AuthProvider>
   </React.StrictMode>,
   document.getElementById('root'),
