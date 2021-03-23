@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 import React, { createContext, useContext, useState } from 'react';
-import { setAccessToken } from '../accessToken';
-import api from '../api';
+import { api } from '../api';
 import type { ILoginFormData } from '../types';
 
 interface AuthContextValue {
@@ -33,8 +32,7 @@ export const AuthProvider: React.FC = ({ children }) => {
     setIsLoading(true);
     setError(null);
     try {
-      const { accessToken } = await api.login({ email, password });
-      setAccessToken(accessToken);
+      await api.login({ email, password });
       setIsLoggedIn(true);
     } catch (error) {
       setError(error.response.data.message);
@@ -45,7 +43,6 @@ export const AuthProvider: React.FC = ({ children }) => {
 
   const logout = async () => {
     await api.logout();
-    setAccessToken('');
     setIsLoggedIn(false);
   };
 

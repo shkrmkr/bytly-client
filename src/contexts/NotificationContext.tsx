@@ -2,12 +2,12 @@ import { nanoid } from 'nanoid';
 import React, { createContext, useContext, useReducer } from 'react';
 import type { INotification } from '../types';
 
-const addNotification = (payload: Omit<INotification, 'id'>) => ({
+export const addNotification = (payload: Omit<INotification, 'id'>) => ({
   type: 'ADD' as const,
   payload: { ...payload, id: nanoid() } as INotification,
 });
 
-const deleteNotification = (payload: INotification['id']) => ({
+export const deleteNotification = (payload: INotification['id']) => ({
   type: 'DELETE' as const,
   payload,
 });
@@ -42,22 +42,7 @@ const NotificationContext = createContext<{
 });
 
 export const NotificationProvider: React.FC = ({ children }) => {
-  const notifications: INotification[] = [
-    {
-      id: nanoid(),
-      message: 'hello world',
-      title: 'Successfully retrieved all posts!',
-      type: 'SUCCESS',
-    },
-    {
-      id: nanoid(),
-      message: 'Warning!!!',
-      title: 'Successfully retrieved all posts!',
-      type: 'WARNING',
-    },
-  ];
-
-  const [state, dispatch] = useReducer(notificationReducer, notifications);
+  const [state, dispatch] = useReducer(notificationReducer, []);
 
   return (
     <NotificationContext.Provider value={{ state, dispatch }}>

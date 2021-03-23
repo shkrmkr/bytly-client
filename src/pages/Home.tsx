@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { IoRocketOutline } from 'react-icons/io5';
 import Loader from 'react-loader-spinner';
 import { useMutation } from 'react-query';
-import api from '../api';
+import { api } from '../api';
 import heroImage from '../assets/hero-image.svg';
 import { UrlList } from '../components/UrlList';
 import type { IUrl } from '../types';

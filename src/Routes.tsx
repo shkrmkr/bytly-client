@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Route, Switch, useLocation } from 'react-router-dom';
-import { setAccessToken } from './accessToken';
-import api from './api';
+import { api } from './api';
 import { Footer } from './components/Footer';
 import { Navbar } from './components/Navbar';
 import { PageSpinner } from './components/PageSpinner';
@@ -16,14 +15,13 @@ import { Register } from './pages/Register';
 
 export const Routes: React.FC = () => {
   const [loading, setLoading] = useState(true);
-  const { setIsLoggedIn, isLoggedIn } = useAuthContext();
+  const { setIsLoggedIn } = useAuthContext();
   const location = useLocation();
 
   useEffect(() => {
     (async () => {
       try {
-        const { accessToken } = await api.refreshToken();
-        setAccessToken(accessToken);
+        await api.refreshToken();
         setIsLoggedIn(true);
       } finally {
         setLoading(false);

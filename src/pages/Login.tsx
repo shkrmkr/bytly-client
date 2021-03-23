@@ -2,7 +2,7 @@ import hookFormResolver from '@hookform/resolvers/yup';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import Loader from 'react-loader-spinner';
-import { useHistory } from 'react-router';
+import { Redirect } from 'react-router';
 import * as yup from 'yup';
 import { useAuthContext } from '../contexts/AuthContext';
 import type { ILoginFormData } from '../types';
@@ -20,16 +20,15 @@ export const Login: React.FC = () => {
   const { register, handleSubmit, errors } = useForm<ILoginFormData>({
     resolver: hookFormResolver.yupResolver(loginSchema),
   });
-  const history = useHistory();
-  const { isLoading, error, login } = useAuthContext();
+  const { isLoading, error, login, isLoggedIn } = useAuthContext();
 
   const onSubmit = handleSubmit(async (data) => {
     await login(data);
-
-    if (!error) {
-      history.push('/dashboard');
-    }
   });
+
+  if (isLoggedIn) {
+    return <Redirect to="/dashboard" />;
+  }
 
   return (
     <main className={styles.container}>

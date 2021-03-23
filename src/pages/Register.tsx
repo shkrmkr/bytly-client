@@ -4,7 +4,11 @@ import { useForm } from 'react-hook-form';
 import Loader from 'react-loader-spinner';
 import { useHistory } from 'react-router';
 import * as yup from 'yup';
-import api from '../api';
+import { api } from '../api';
+import {
+  addNotification,
+  useNotificationContext,
+} from '../contexts/NotificationContext';
 import styles from './AuthPage.module.scss';
 
 interface RegisterFormData {
@@ -41,6 +45,7 @@ export const Register: React.FC = () => {
   });
   const [error, setError] = useState<null | string>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const { dispatch } = useNotificationContext();
   const history = useHistory();
 
   const onSubmit = handleSubmit(async ({ email, password }) => {
@@ -49,6 +54,13 @@ export const Register: React.FC = () => {
       setIsLoading(true);
       await api.register({ email, password });
       history.push('/login');
+      dispatch(
+        addNotification({
+          title: '회원가입 성공',
+          type: 'SUCCESS',
+          message: '로그인해주세요',
+        }),
+      );
     } catch (error) {
       setError(error.response.data.message);
     } finally {
