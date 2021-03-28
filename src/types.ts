@@ -25,7 +25,7 @@ export interface IResponseWithToken {
   accessToken: string;
 }
 
-export interface ILoginFormData {
+export interface IAuthFormData {
   email: string;
   password: string;
 }

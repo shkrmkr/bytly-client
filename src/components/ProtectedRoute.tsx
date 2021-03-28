@@ -1,6 +1,6 @@
 import React from 'react';
+import { useQueryClient } from 'react-query';
 import { Redirect, Route } from 'react-router';
-import { useAuthContext } from '../contexts/AuthContext';
 
 interface Props {
   component: React.ComponentClass | React.FC;
@@ -13,7 +13,7 @@ export const ProtectedRoute: React.FC<Props> = ({
   exact = false,
   path,
 }) => {
-  const { isLoggedIn } = useAuthContext();
+  const isLoggedIn = useQueryClient().getQueryData('isLoggedIn');
 
   if (isLoggedIn) {
     return <Route exact={exact} path={path} component={component} />;

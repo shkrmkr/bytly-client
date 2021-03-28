@@ -1,14 +1,17 @@
 import hookFormResolver from '@hookform/resolvers/yup';
-import React, { useState } from 'react';
+import type { AxiosError } from 'axios';
+import React from 'react';
 import { useForm } from 'react-hook-form';
 import Loader from 'react-loader-spinner';
+import { useMutation } from 'react-query';
 import { useHistory } from 'react-router';
 import * as yup from 'yup';
-import { api } from '../api';
+import * as api from '../api';
 import {
   addNotification,
   useNotificationContext,
 } from '../contexts/NotificationContext';
+import type { IAuthFormData } from '../types';
 import styles from './AuthPage.module.scss';
 
 interface RegisterFormData {
@@ -43,16 +46,15 @@ export const Register: React.FC = () => {
     resolver: hookFormResolver.yupResolver(registerSchema),
     mode: 'onBlur',
   });
-  const [error, setError] = useState<null | string>(null);
-  const [isLoading, setIsLoading] = useState(false);
   const { dispatch } = useNotificationContext();
   const history = useHistory();
 
-  const onSubmit = handleSubmit(async ({ email, password }) => {
-    try {
-      setError(null);
-      setIsLoading(true);
-      await api.register({ email, password });
+  const { error, isLoading, mutate } = useMutation<
+    void,
+    AxiosError,
+    IAuthFormData
+  >(api.register, {
+    onSuccess: () => {
       history.push('/login');
       dispatch(
         addNotification({
@@ -61,12 +63,12 @@ export const Register: React.FC = () => {
           message: '로그인해주세요',
         }),
       );
-    } catch (error) {
-      setError(error.response.data.message);
-    } finally {
-      setIsLoading(false);
-    }
+    },
   });
+
+  const onSubmit = handleSubmit(({ email, password }) =>
+    mutate({ email, password }),
+  );
 
   return (
     <main className={styles.container}>
@@ -119,7 +121,9 @@ export const Register: React.FC = () => {
               '로그인'
             )}
           </button>
-          <span className={error ? styles.error : ''}>{error}</span>
+          <span className={error ? styles.error : ''}>
+            {error?.response?.data.message}
+          </span>
         </form>
       </div>
     </main>

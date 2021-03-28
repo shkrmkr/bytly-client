@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
 import { useQuery } from 'react-query';
-import { api } from '../api';
+import { check } from '../api';
 import type { IUrl } from '../types';
 
 export const Dashboard: React.FC = () => {
-  const { data } = useQuery('check', () => api.check());
+  const { data } = useQuery('check', () => check());
 
   useEffect(() => {
     const localUrlsStr = localStorage.getItem('shortUrls');

@@ -1,12 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import type { AxiosError } from 'axios';
+import React, { useEffect } from 'react';
+import { useMutation, useQueryClient } from 'react-query';
 import { Route, Switch, useLocation } from 'react-router-dom';
-import { api } from './api';
+import { refreshToken } from './api';
 import { Footer } from './components/Footer';
 import { Navbar } from './components/Navbar';
 import { PageSpinner } from './components/PageSpinner';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import { Toast } from './components/Toast';
-import { useAuthContext } from './contexts/AuthContext';
 import { Dashboard } from './pages/Dashboard';
 import { Home } from './pages/Home';
 import { Login } from './pages/Login';
@@ -14,20 +15,21 @@ import { NotFound } from './pages/NotFound';
 import { Register } from './pages/Register';
 
 export const Routes: React.FC = () => {
-  const [loading, setLoading] = useState(true);
-  const { setIsLoggedIn } = useAuthContext();
   const location = useLocation();
+  const queryClient = useQueryClient();
+
+  const { mutate, isLoading } = useMutation<void, AxiosError, void>(
+    refreshToken,
+    {
+      onSuccess: () => {
+        queryClient.setQueryData('isLoggedIn', true);
+      },
+    },
+  );
 
   useEffect(() => {
-    (async () => {
-      try {
-        await api.refreshToken();
-        setIsLoggedIn(true);
-      } finally {
-        setLoading(false);
-      }
-    })();
-  }, []);
+    mutate();
+  }, [mutate]);
 
   return (
     <>
@@ -35,7 +37,7 @@ export const Routes: React.FC = () => {
       {location.pathname !== '/login' && location.pathname !== '/register' && (
         <Navbar />
       )}
-      {loading ? (
+      {isLoading ? (
         <PageSpinner />
       ) : (
         <Switch>

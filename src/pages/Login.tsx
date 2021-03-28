@@ -1,14 +1,16 @@
 import hookFormResolver from '@hookform/resolvers/yup';
+import type { AxiosError } from 'axios';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import Loader from 'react-loader-spinner';
+import { useMutation, useQueryClient } from 'react-query';
 import { Redirect } from 'react-router';
 import * as yup from 'yup';
-import { useAuthContext } from '../contexts/AuthContext';
-import type { ILoginFormData } from '../types';
+import { login } from '../api';
+import type { IAuthFormData } from '../types';
 import styles from './AuthPage.module.scss';
 
-const loginSchema: yup.SchemaOf<ILoginFormData> = yup.object().shape({
+const loginSchema: yup.SchemaOf<IAuthFormData> = yup.object().shape({
   email: yup
     .string()
     .email('올바른 이메일 주소를 입력해주세요')
@@ -17,16 +19,25 @@ const loginSchema: yup.SchemaOf<ILoginFormData> = yup.object().shape({
 });
 
 export const Login: React.FC = () => {
-  const { register, handleSubmit, errors } = useForm<ILoginFormData>({
+  const { register, handleSubmit, errors } = useForm<IAuthFormData>({
     resolver: hookFormResolver.yupResolver(loginSchema),
   });
-  const { isLoading, error, login, isLoggedIn } = useAuthContext();
+  const queryClient = useQueryClient();
+  // const { isLoading, error, login, isLoggedIn } = useAuthContext();
 
-  const onSubmit = handleSubmit(async (data) => {
-    await login(data);
+  const { mutate, error, isLoading } = useMutation<
+    void,
+    AxiosError,
+    IAuthFormData
+  >(login, {
+    onSuccess: () => {
+      queryClient.setQueryData('isLoggedIn', true);
+    },
   });
 
-  if (isLoggedIn) {
+  const onSubmit = handleSubmit((data) => mutate(data));
+
+  if (queryClient.getQueryData('isLoggedIn')) {
     return <Redirect to="/dashboard" />;
   }
 
@@ -68,7 +79,9 @@ export const Login: React.FC = () => {
               '로그인'
             )}
           </button>
-          <span className={error ? styles.error : ''}>{error}</span>
+          <span className={error ? styles.error : ''}>
+            {error?.response?.data.message}
+          </span>
         </form>
       </div>
     </main>

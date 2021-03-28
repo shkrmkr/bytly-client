@@ -1,9 +1,8 @@
-import type { AxiosError } from 'axios';
 import React, { useState } from 'react';
 import { IoRocketOutline } from 'react-icons/io5';
 import Loader from 'react-loader-spinner';
 import { useMutation } from 'react-query';
-import { api } from '../api';
+import { createUrl } from '../api';
 import heroImage from '../assets/hero-image.svg';
 import { UrlList } from '../components/UrlList';
 import type { IUrl } from '../types';
@@ -17,7 +16,7 @@ export const Home: React.FC = () => {
     return local ? JSON.parse(local) : [];
   });
 
-  const { mutate, isLoading: isMutating } = useMutation(api.createUrl, {
+  const { mutate, isLoading: isMutating } = useMutation(createUrl, {
     onSuccess: (data) => {
       if (shortUrls.some((url) => url.id === data.id)) {
         return;
@@ -28,9 +27,6 @@ export const Home: React.FC = () => {
         localStorage.setItem('shortUrls', JSON.stringify(newList));
         return newList;
       });
-    },
-    onError: (error: AxiosError) => {
-      console.error(error.response?.data.message);
     },
   });
 

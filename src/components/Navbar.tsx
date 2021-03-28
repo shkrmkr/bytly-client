@@ -1,16 +1,23 @@
-import React from 'react';
+import type { AxiosError } from 'axios';
+import React, { useCallback } from 'react';
+import { useMutation, useQueryClient } from 'react-query';
 import { Link, NavLink, useHistory } from 'react-router-dom';
-import { useAuthContext } from '../contexts/AuthContext';
+import { logout } from '../api';
 import styles from './Navbar.module.scss';
 
 export const Navbar: React.FC = () => {
-  const { isLoggedIn, logout } = useAuthContext();
   const history = useHistory();
+  const queryClient = useQueryClient();
+  const isLoggedIn = queryClient.getQueryData('isLoggedIn');
 
-  const handleLogout = () => {
-    logout();
-    history.push('/');
-  };
+  const { mutate } = useMutation<void, AxiosError, void>(logout, {
+    onSuccess: () => {
+      history.push('/');
+      queryClient.setQueryData('isLoggedIn', false);
+    },
+  });
+
+  const handleLogout = useCallback(() => mutate(), []);
 
   return (
     <header className={styles.container}>
