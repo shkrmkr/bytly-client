@@ -57,6 +57,11 @@ export const UrlListItem: React.FC<Props> = ({ url }) => {
       </a>
 
       <div className={styles.control}>
+        <img
+          src={url.qrCodeDataUrl}
+          alt={`QR code for ${formattedUrls.original}`}
+          className={styles.qr}
+        />
         <button
           ref={btnRef}
           data-clipboard-text={formattedUrls.shortWithoutProtocol}

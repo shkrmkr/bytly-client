@@ -9,31 +9,25 @@
 .topRight {
   top: 1.2rem;
   right: 1.2rem;
-  animation: move-from-right 0.7s;
 }
 
 .bottomRight {
   bottom: 1.2rem;
   right: 1.2rem;
-  animation: move-from-right 0.7s;
 }
 
 .topLeft {
   top: 1.2rem;
   left: 1.2rem;
-  animation: move-from-left 0.7s;
 }
 
 .bottomLeft {
   bottom: 1.2rem;
   left: 1.2rem;
-  animation: move-from-left 0.7s;
 }
 
 .noti {
-  transition: 0.3s ease;
   position: relative;
-  pointer-events: auto;
   overflow: hidden;
   margin-bottom: 1.5rem;
   padding: 2rem;
@@ -41,7 +35,6 @@
   max-height: 10rem;
   border: 2px solid #fff;
   border-radius: 2px;
-  opacity: 0.9;
   display: flex;
   align-items: center;
   gap: 2rem;
@@ -68,6 +61,28 @@
   &:hover {
     opacity: 1;
   }
+}
+
+.slideEnter {
+  opacity: 0;
+  transform: translateX(-500px);
+}
+
+.slideEnterActive {
+  opacity: 1;
+  transform: translateX(0);
+  transition: all 0.5s ease-in;
+}
+
+.slideExit {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.slideExitActive {
+  opacity: 0;
+  transform: translateX(-500px);
+  transition: all 0.5s ease-in;
 }
 
 .closeBtn {
@@ -99,22 +114,4 @@
 .WARNING {
   background-color: $warning;
   border-color: darken($warning, 10);
-}
-
-@keyframes move-from-right {
-  from {
-    transform: translateX(100%);
-  }
-  to {
-    transform: translateX(0);
-  }
-}
-
-@keyframes move-from-left {
-  from {
-    transform: translateX(-100%);
-  }
-  to {
-    transform: translateX(0);
-  }
 }

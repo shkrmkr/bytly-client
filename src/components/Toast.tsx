@@ -6,6 +6,7 @@ import {
   BsInfoCircle,
   BsX,
 } from 'react-icons/bs';
+import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import { useNotificationContext } from '../contexts/NotificationContext';
 import type { INotification } from '../types';
 import styles from './Toast.module.scss';
@@ -40,26 +41,42 @@ export const Toast: React.FC<Props> = ({
 
   return (
     <div className={`${styles.container} ${styles[position]}`}>
-      {state.map((noti) => {
-        if (interval !== undefined) {
-          setInterval(() => {
-            dispatch({ type: 'DELETE', payload: noti.id });
-          }, interval);
-        }
+      <TransitionGroup>
+        {state.map((noti) => {
+          if (interval !== undefined) {
+            setInterval(() => {
+              dispatch({ type: 'DELETE', payload: noti.id });
+            }, interval);
+          }
 
-        return (
-          <div key={noti.id} className={`${styles.noti} ${styles[noti.type]}`}>
-            <button className={styles.closeBtn} onClick={handleDelete(noti.id)}>
-              <BsX />
-            </button>
-            <div className={styles.notiIcon}>{getIcon(noti.type)}</div>
-            <div>
-              <p className={styles.notiTitle}>{noti.title}</p>
-              <p className={styles.notiMessage}>{noti.message}</p>
-            </div>
-          </div>
-        );
-      })}
+          return (
+            <CSSTransition
+              key={noti.id}
+              timeout={500}
+              classNames={{
+                enter: styles.slideEnter,
+                enterActive: styles.slideEnterActive,
+                exit: styles.slideExit,
+                exitActive: styles.slideExitActive,
+              }}
+            >
+              <div className={`${styles.noti} ${styles[noti.type]}`}>
+                <button
+                  className={styles.closeBtn}
+                  onClick={handleDelete(noti.id)}
+                >
+                  <BsX />
+                </button>
+                <div className={styles.notiIcon}>{getIcon(noti.type)}</div>
+                <div>
+                  <p className={styles.notiTitle}>{noti.title}</p>
+                  <p className={styles.notiMessage}>{noti.message}</p>
+                </div>
+              </div>
+            </CSSTransition>
+          );
+        })}
+      </TransitionGroup>
     </div>
   );
 };

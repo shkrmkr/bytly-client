@@ -10,6 +10,7 @@ export interface IUrl {
   id: number;
   hash: string;
   originalUrl: string;
+  qrCodeDataUrl: string;
   hits: number;
 }
 

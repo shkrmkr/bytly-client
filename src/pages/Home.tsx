@@ -1,3 +1,4 @@
+import type { AxiosError } from 'axios';
 import React, { useState } from 'react';
 import { IoRocketOutline } from 'react-icons/io5';
 import Loader from 'react-loader-spinner';
@@ -5,6 +6,10 @@ import { useMutation } from 'react-query';
 import { createUrl } from '../api';
 import heroImage from '../assets/hero-image.svg';
 import { UrlList } from '../components/UrlList';
+import {
+  addNotification,
+  useNotificationContext,
+} from '../contexts/NotificationContext';
 import type { IUrl } from '../types';
 import styles from './Home.module.scss';
 
@@ -15,6 +20,8 @@ export const Home: React.FC = () => {
     const local = localStorage.getItem('shortUrls');
     return local ? JSON.parse(local) : [];
   });
+
+  const { dispatch } = useNotificationContext();
 
   const { mutate, isLoading: isMutating } = useMutation(createUrl, {
     onSuccess: (data) => {
@@ -27,6 +34,21 @@ export const Home: React.FC = () => {
         localStorage.setItem('shortUrls', JSON.stringify(newList));
         return newList;
       });
+    },
+    onError: (
+      error: AxiosError<{
+        statusCode: number;
+        message: string[];
+        error: string;
+      }>,
+    ) => {
+      dispatch(
+        addNotification({
+          title: 'Something went wrong',
+          type: 'DANGER',
+          message: error.response?.data.message[0],
+        }),
+      );
     },
   });
 

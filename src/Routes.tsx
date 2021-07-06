@@ -33,7 +33,7 @@ export const Routes: React.FC = () => {
 
   return (
     <>
-      <Toast interval={3000} />
+      <Toast interval={5000} />
       {location.pathname !== '/login' && location.pathname !== '/register' && (
         <Navbar />
       )}
